@@ -1,17 +1,26 @@
 // TodoList.jsx
 import TodoItem from './TodoItem';
 
-export default function TodoList({ todos, loading, onToggle, onRename, onRemove }) {
-  if (loading) return <p className="todo-loading">Loading tasks…</p>;
+export default function TodoList({ todos, loading, onToggle, onRename, onRemove, filter, onFilterChange }) {
+    const filterTabs = (
+    <div className="filter-tabs">
+      <button className={filter === 'all' ? 'active' : ''} onClick={() => onFilterChange('all')}>All</button>
+      <button className={filter === 'active' ? 'active' : ''} onClick={() => onFilterChange('active')}>Active</button>
+      <button className={filter === 'done' ? 'active' : ''} onClick={() => onFilterChange('done')}>Done</button>
+    </div>
+  );
+
+  if (loading) return <>{filterTabs}<p className="todo-loading">Loading tasks…</p></>;
 
   if (todos.length === 0) {
-    return <p className="todo-empty">No tasks yet — add one above.</p>;
+    return <>{filterTabs}<p className="todo-empty">No tasks yet — add one above.</p></>;
   }
 
   const doneCount = todos.filter(t => t.done).length;
 
-  return (
+    return (
     <>
+      {filterTabs}
       <ul className="todo-list">
         {todos.map(todo => (
           <TodoItem
